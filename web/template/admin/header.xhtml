@@ -1,0 +1,55 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+
+        <ui:composition>
+            <nav class="navbar navbar-dark  bg-dark">
+                <a class="navbar-brand" href="/arabaTanitim/faces/index.xhtml">
+                    Araba Tanitim Sitesi
+                </a>
+            <style>
+                .nav-link{
+                color: red
+                }
+            </style>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/aciklama/list.xhtml">Açıklama</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/fiyat/list.xhtml">Fiyat</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/kasa/list.xhtml">Kasa</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/mensei/list.xhtml">Mensei</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/dosya/list.xhtml">Dosya</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/marka/list.xhtml">Marka</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/motor/list.xhtml">Motor</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/vites/list.xhtml">Vites</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/yakit/list.xhtml">Yakıt</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/yil/list.xhtml">Yıl</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/model/list.xhtml">Model</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/yetki/list.xhtml">Yetki</a>
+                <a  class="nav-link" immediate="true" href="/arabaTanitim/faces/admin/user/list.xhtml">User</a>
+
+                <c:if test="#{!userController.isLoggedin()}">
+                    <a class="navbar-right" immediate="true" href="/arabaTanitim/faces/admin/login.xhtml" >
+                        Login
+                    </a>                
+                </c:if>
+                <c:if test="#{userController.type}">
+                    <a class="navbar-right">
+                        <h:commandLink immediate="true" action="#{userController.site()}" value="Site"/>
+
+                    </a>
+                </c:if>
+                <c:if test="#{userController.isLoggedin()}">
+                    <a class="navbar-right">
+                        <a style="color: #ffffff">#{session.getAttribute("userid")}</a>
+                        <h:commandLink immediate="true" action="#{userController.logout()}" value="Logout"/>
+                    </a>
+                </c:if>
+            </nav>
+        </ui:composition>
+    </body>
+</html>

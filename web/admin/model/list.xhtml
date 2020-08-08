@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>Model</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <h:form id="ajax-table">
+                                <h:dataTable id="data-table" value="#{modelController.getaList()}" var="aModel" styleClass="table table-stripped">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                            #{aModel.id}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ADI</f:facet>
+                                        <h:commandLink action="#{modelController.updateForm(aModel)}" value="#{aModel.adi}" >
+                                            <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                        </h:commandLink>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">RENK</f:facet>
+                                            #{aModel.renk}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Fiyat</f:facet>
+                                            #{aModel.fiyat.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">MARKA</f:facet>
+                                            #{aModel.marka.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">MOTOR</f:facet>
+                                            #{aModel.motor.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">KASA</f:facet>
+                                            #{aModel.kasa.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">YAKIT</f:facet>
+                                            #{aModel.yakit.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">VITES</f:facet>
+                                            #{aModel.vites.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">YIL</f:facet>
+                                            #{aModel.yil.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ACIKLAMA</f:facet>
+                                        <ui:repeat value="#{aModel.aciklama}" var="aciklama">
+                                            <ul>
+                                                <li>#{aciklama.icerik}</li>
+                                            </ul>
+                                        </ui:repeat>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">DELETE</f:facet>
+                                        <h:commandButton styleClass="btn btn-danger" action="#{modelController.delete(aModel)}" value="Delete" />
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+                    </div>
+
+                  <div id="search-panel">
+                                    <h:inputText autocomplete="off" value="#{modelController.display}">
+                                        <f:passThroughAttribute name="placeHolder" value="Search ..."/>
+                                        <f:ajax event="keyup" listener="#{modelController.getaList()}" execute="@this" render="template-form:ajax-table:data-table" />
+                                    </h:inputText>
+
+                                    <h:commandButton action="#{modelController.previous}" value="Previous" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                    <h:outputLabel  value="#{modelController.page} of #{modelController.pageCount}" styleClass="text textArea"/>
+                                    <h:commandButton action="#{modelController.next}" value="Next" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                    <div class="col-md-6" >
+                        <h:form id="ajax-form">
+                            <div class="form-group">
+                                <h:inputHidden value="#{modelController.model.id}"/>
+                                <label for="inputName">Model Adi</label>
+                                <h:inputText styleClass="form-control" value="#{modelController.model.adi}"/> <br/>
+                                <label for="inputName">Model Rengi</label>
+                                <h:inputText styleClass="form-control" value="#{modelController.model.renk}"/> <br/>
+                                <label for="inputName">Fiyat</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.fiyat}" converter="fiyatConverter">
+                                    <f:selectItems value="#{fiyatController.getaList()}" var="fiyat" itemValue="#{fiyat}" itemLabel="#{fiyat.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Kasa</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.kasa}" converter="kasaConverter">
+                                    <f:selectItems value="#{kasaController.getaList()}" var="kasa" itemValue="#{kasa}" itemLabel="#{kasa.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Vites</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.vites}" converter="vitesConverter">
+                                    <f:selectItems value="#{vitesController.getaList()}" var="vites" itemValue="#{vites}" itemLabel="#{vites.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Marka</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.marka}" converter="markaConverter">
+                                    <f:selectItems value="#{markaController.getaList()}" var="marka" itemValue="#{marka}" itemLabel="#{marka.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Motor</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.motor}" converter="motorConverter">
+                                    <f:selectItems value="#{motorController.getaList()}" var="motor" itemValue="#{motor}" itemLabel="#{motor.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Yakit</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.yakit}" converter="yakitConverter">
+                                    <f:selectItems value="#{yakitController.getaList()}" var="yakit" itemValue="#{yakit}" itemLabel="#{yakit.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Yil</label>
+                                <h:selectOneMenu styleClass="custom-select" value="#{modelController.model.yil}" converter="yilConverter">
+                                    <f:selectItems value="#{yilController.getaList()}" var="yil" itemValue="#{yil}" itemLabel="#{yil.adi}"/>
+                                </h:selectOneMenu>
+                                <label for="inputName">Model Aciklama</label>
+                                <h:selectManyMenu styleClass="custom-select" value="#{modelController.model.aciklama}" converter="aciklamaConverter">
+                                    <f:selectItems value="#{aciklamaController.getaList()}" var="aciklma" itemValue="#{aciklama}" itemLabel="#{aciklma.adi}"/>
+                                </h:selectManyMenu>
+
+
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton styleClass="btn btn-primary" rendered="#{modelController.model.id!=0}" value="Update" action="#{modelController.update}">
+                                    <f:ajax execute="ajax-form" render="template-form"/>
+                                </h:commandButton>
+
+                                <h:commandButton styleClass="btn btn-primary" rendered="#{modelController.model.id==0}" value="Create" action="#{modelController.create}">  
+                                    <f:ajax execute="ajax-form" render="template-form"/>
+                                </h:commandButton>
+
+                                <h:commandButton styleClass="btn btn-secondary" rendered="#{modelController.model.id!=0}" value="Clear" action="#{modelController.clearForm}">  
+                                    <f:ajax execute="ajax-form" render="template-form"/>
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </div>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+

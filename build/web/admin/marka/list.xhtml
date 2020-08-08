@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>Marka</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h:form id="ajax-table">
+                                <h:dataTable id="data-table" value="#{markaController.getaList()}" var="aMarka" styleClass="table table-stripped">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                            #{aMarka.id}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ADİ</f:facet>
+                                        <h:commandLink action="#{markaController.updateForm(aMarka)}" value="#{aMarka.adi}" >
+                                            <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                        </h:commandLink>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Mensei</f:facet>
+                                            #{aMarka.mensei.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Logo</f:facet>
+                                        <h:graphicImage value="/file#{aMarka.logo.dosyaYolu}" width="50" height="50" />
+
+                                    </h:column>
+
+                                    <h:column>
+                                        <f:facet name="header">DELETE</f:facet>
+
+                                        <h:commandButton styleClass="btn btn-danger" action="#{markaController.delete(aMarka)}" value="Delete" />
+
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+
+
+                        <div class="col-md-6" >
+                    <div id="search-panel">
+                                    <h:inputText autocomplete="off" value="#{markaController.display}">
+                                        <f:passThroughAttribute name="placeHolder" value="Search ..."/>
+                                        <f:ajax event="keyup" listener="#{markaController.getaList()}" execute="@this" render="template-form:ajax-table:data-table" />
+                                    </h:inputText>
+
+                                    <h:commandButton action="#{markaController.previous}" value="Previous" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                    <h:outputLabel  value="#{markaController.page} of #{markaController.pageCount}" styleClass="text textArea"/>
+                                    <h:commandButton action="#{markaController.next}" value="Next" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            <h:form id="ajax-form">
+                                <div class="form-group">
+                                    <h:inputHidden value="#{markaController.marka.id}"/>
+                                    <label for="inputName">Marka Adi</label>
+                                    <h:inputText styleClass="form-control" value="#{markaController.marka.adi}"/> <br/>
+                                    <label for="inputName">Mensei</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{markaController.marka.mensei}" converter="menseiConverter">
+                                        <f:selectItems value="#{menseiController.getaList()}" var="mensei" itemValue="#{mensei}" itemLabel="#{mensei.adi}"/>
+                                    </h:selectOneMenu>
+                                    <label for="inputName">Logo</label>
+
+                                    <h:selectOneMenu styleClass="custom-select" value="#{markaController.marka.logo}" converter="dosyaConverter">
+                                        <f:selectItems value="#{dosyaController.getaList()}" var="logo" itemValue="#{loho}" itemLabel="#{logo.adi}"/>
+                                    </h:selectOneMenu>
+
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{markaController.marka.id!=0}" value="Update" action="#{markaController.update}">
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{markaController.marka.id==0}" value="Create" action="#{markaController.create}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-secondary" rendered="#{markaController.marka.id!=0}" value="Clear" action="#{markaController.clearForm}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            </h:form>
+                        </div>
+
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+
